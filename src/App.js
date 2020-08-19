@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { getHello } from  './api/hello';
 import { getAuthenticated, loadLoginScreen, login, logout, validateState } from './api/oidc';
 
 const params = (new URL(document.location)).searchParams;
@@ -9,6 +10,7 @@ const auth = getAuthenticated();
 export default function App() {
   const [authenticated, setAuthenticated] = useState(auth);
   const [authenticating, setAuthenticating] = useState(code !== null);
+  const [hello, setHello] = useState('');
   useEffect(() => {
     const execute = async () => {
       window.history.replaceState({}, document.title, '/');
@@ -25,12 +27,21 @@ export default function App() {
     if (!authenticated && code !== null) {
       execute();
     }
+  }, [authenticated]);
+  const handleHelloClick = useCallback(async () => {
+    try {
+      const newHello = await getHello();
+      setHello(newHello);
+    } catch (err) {
+      // DO NOTHING
+    }
   }, []);
   const handleLoginClick = useCallback(() => {
     loadLoginScreen();
   }, []);
   const handleLogoutClick = useCallback(() => {
     logout();
+    setHello('');
     setAuthenticated(false);
   }, []);
 
@@ -40,5 +51,15 @@ export default function App() {
   if (!authenticated) {
     return <button onClick={handleLoginClick}>Login</button>;
   }
-  return <button onClick={handleLogoutClick}>Logout</button>
+  return (
+    <>
+      <div>
+        <div><b>Hello:</b> {hello}</div>
+        <button onClick={handleHelloClick}>Hello</button>
+      </div>
+      <div>
+        <button onClick={handleLogoutClick}>Logout</button>
+      </div>
+    </>
+  );
 }

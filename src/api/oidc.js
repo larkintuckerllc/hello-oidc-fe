@@ -18,12 +18,14 @@ export const loadLoginScreen = () => {
   window.location.assign(`${process.env.REACT_APP_OIDC_URI_BASE}/login-screen?state=${state}&nonce=${nonce}`);
 }
 
+/** Validates returned state against persisted state */
 export const validateState = checkState => {
   const state = window.localStorage.getItem('state');
   window.localStorage.removeItem('state');
   return checkState === state;
 }
 
+/** Validates returned nonce against persisted nonce */
 const validateNonce = checkNonce => {
   const nonce = window.localStorage.getItem('nonce');
   window.localStorage.removeItem('nonce');

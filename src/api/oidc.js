@@ -29,7 +29,16 @@ const validateNonce = checkNonce => {
 }
 
 export const login = async code => {
-  const response = await fetch(`${process.env.REACT_APP_OIDC_URI_BASE}/get-tokens?code=${code}`);
+  const response = await fetch(
+    `${process.env.REACT_APP_OIDC_URI_BASE}/get-tokens`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ code }), 
+    },
+  );
   if (!response.ok) {
     throw new Error();
   }
@@ -44,4 +53,13 @@ export const login = async code => {
 export const logout = () => {
   window.localStorage.removeItem('id_token');
   window.localStorage.removeItem('refresh_token');
+}
+
+export const getTokens = () => {
+  const id_token = window.localStorage.getItem('id_token');
+  const refresh_token = window.localStorage.getItem('refresh_token');
+  return ({
+    id_token,
+    refresh_token,
+  })
 }

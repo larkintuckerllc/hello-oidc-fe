@@ -1,11 +1,13 @@
 import jwt_decode from 'jwt-decode';
 import { v4 as uuidv4 } from 'uuid';
 
+/** Determines if application is authenticated */
 export const getAuthenticated = () => {
   const idToken = window.localStorage.getItem('id_token');
   return idToken !== null;
 }
 
+/** Prepares application for login and loads login screen  */
 export const loadLoginScreen = () => {
   window.localStorage.removeItem('id_token');
   window.localStorage.removeItem('refresh_token');

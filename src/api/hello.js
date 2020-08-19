@@ -1,16 +1,29 @@
-import { getTokens } from './oidc';
+import { getTokens, refresh } from './oidc';
 
-// TODO: REFRESH
-export const getHello = async () =>  {
+const getHelloResponse = async () => {
   const { id_token } = getTokens();
   const response = await fetch(`${process.env.REACT_APP_API_BASE}/`, {
     headers: {
       Authorization: `Bearer ${id_token}`,
     },
   });
+  return response;
+};
+
+export const getHello = async () => {
+  const response = await getHelloResponse();
   if (!response.ok) {
-    throw new Error();
-  }
+    if (response.status !== 401) {
+      throw new Error();
+    }
+    await refresh();
+    const retryResponse = await getHelloResponse();
+    if (!retryResponse.ok) {
+      throw new Error();
+    }
+    const { hello } = await response.json();
+    return hello;
+  } 
   const { hello } = await response.json();
   return hello;
 }

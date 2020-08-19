@@ -22,7 +22,7 @@ export default function App() {
       }
       setAuthenticating(false);
     };
-    if (code !== null) {
+    if (!authenticated && code !== null) {
       execute();
     }
   }, []);

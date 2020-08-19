@@ -32,6 +32,7 @@ const validateNonce = checkNonce => {
   return checkNonce === nonce;
 }
 
+/** Exchange code for tokens  */
 export const login = async code => {
   const response = await fetch(
     `${process.env.REACT_APP_OIDC_URI_BASE}/get-tokens`,

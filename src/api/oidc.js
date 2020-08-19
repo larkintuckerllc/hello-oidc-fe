@@ -48,7 +48,7 @@ export const login = async code => {
     throw new Error();
   }
   const { id_token, refresh_token } = await response.json();
-  const { nonce }= jwt_decode(id_token);
+  const { nonce } = jwt_decode(id_token);
   const validNonce = validateNonce(nonce);
   if (!validNonce) throw new Error();
   window.localStorage.setItem('id_token', id_token);

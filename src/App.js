@@ -41,8 +41,6 @@ export default function App() {
   }, []);
   const handleLogoutClick = useCallback(() => {
     logout();
-    setHello('');
-    setAuthenticated(false);
   }, []);
 
   if (authenticating) {

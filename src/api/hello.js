@@ -1,4 +1,4 @@
-import { getTokens, refresh } from './oidc';
+import { getTokens, logout, refresh } from './oidc';
 
 const getHelloResponse = async () => {
   const { id_token } = getTokens();
@@ -16,12 +16,17 @@ export const getHello = async () => {
     if (response.status !== 401) {
       throw new Error();
     }
-    await refresh();
+    try {
+      await refresh();
+    } catch (err) {
+      logout();
+      throw new Error();
+    }
     const retryResponse = await getHelloResponse();
     if (!retryResponse.ok) {
       throw new Error();
     }
-    const { hello } = await response.json();
+    const { hello } = await retryResponse.json();
     return hello;
   } 
   const { hello } = await response.json();

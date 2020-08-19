@@ -72,6 +72,7 @@ export const refresh = async () => {
 export const logout = () => {
   window.localStorage.removeItem('id_token');
   window.localStorage.removeItem('refresh_token');
+  window.location.reload();
 }
 
 export const getTokens = () => {
